@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertsSarkari - Government Job Updates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .last-date { color: red; font-weight: bold; }
+        .list-row { transition: background-color 0.3s; }
+        .list-row:hover { background-color: #f3f4f6; }
+        .navbar { transition: all 0.3s ease; }
+        .navbar-scrolled { background-color: #7f1d1d; }
+        .view-button { background-color: #fca5a5; transition: background-color 0.3s; }
+        .view-button:hover { background-color: #f87171; }
+        .alerts-sarkari { font-family: 'Dancing Script', cursive; font-size: 48px; }
+        .striped-separator-vertical {
+            width: 4px;
+            background: linear-gradient(
+                to bottom,
+                #d1d5db 0%,
+                #d1d5db 50%,
+                #ffffff 50%,
+                #ffffff 100%
+            );
+            background-size: 100% 20px;
+        }
+        .striped-separator-horizontal {
+            height: 4px;
+            background: linear-gradient(
+                to right,
+                #d1d5db 0%,
+                #d1d5db 50%,
+                #ffffff 50%,
+                #ffffff 100%
+            );
+            background-size: 20px 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 w-full bg-red-900 text-white p-4 shadow-md z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="alerts-sarkari">AlertsSarkari</h1>
+            <ul class="flex space-x-4 items-center">
+                <li><a href="#jobs" class="hover:underline">Latest Jobs</a></li>
+                <li><a href="#incoming-jobs" class="hover:underline">Upcoming Jobs</a></li>
+                <li><a href="#admit-card" class="hover:underline">Admit Card</a></li>
+                <li><a href="#result" class="hover:underline">Result</a></li>
+                <li><a href="#answer-key" class="hover:underline">Answer Key</a></li>
+                <li><a href="#admission" class="hover:underline">Admission</a></li>
+                <li><a href="#other-updates" class="hover:underline">Other Updates</a></li>
+            </ul>
+            <input type="text" id="searchInput" placeholder="Search..." class="p-2 rounded text-black">
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-red-900 text-white text-center py-20 mt-16">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold mb-4">Welcome to AlertsSarkari</h2>
+            <p class="text-lg">Your one-stop platform for government jobs, results, admit cards, and more!</p>
+        </div>
+    </section>
+
+    <!-- Jobs Sections -->
+    <section id="jobs" class="py-10">
+        <div class="container mx-auto flex flex-col md:flex-row gap-6">
+            <!-- Latest Government Jobs -->
+            <div class="flex-1">
+                <h2 class="text-3xl font-bold text-center mb-6">Latest Government Jobs</h2>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                        <div class="col-span-4">Title</div>
+                        <div class="col-span-2">Posts</div>
+                        <div class="col-span-2">Last Date</div>
+                        <div class="col-span-4">Actions</div>
+                    </div>
+                    <div id="jobsContainer"></div>
+                </div>
+            </div>
+
+            <!-- Striped Separator (Vertical) -->
+            <div class="striped-separator-vertical hidden md:block"></div>
+
+            <!-- Upcoming Government Jobs -->
+            <div class="flex-1">
+                <h2 class="text-3xl font-bold text-center mb-6">Upcoming Government Jobs</h2>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                        <div class="col-span-4">Title</div>
+                        <div class="col-span-2">Status</div>
+                        <div class="col-span-2">Syllabus</div>
+                        <div class="col-span-4">Actions</div>
+                    </div>
+                    <div id="incomingJobsContainer"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Striped Separator (Horizontal) -->
+        <div class="container mx-auto striped-separator-horizontal mt-6"></div>
+    </section>
+
+    <!-- Admit Card Section -->
+    <section id="admit-card" class="py-10">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6">Admit Cards</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                    <div class="col-span-4">Title</div>
+                    <div class="col-span-2">Exam Date</div>
+                    <div class="col-span-2">Details</div>
+                    <div class="col-span-4">Actions</div>
+                </div>
+                <div id="admitCardContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Result Section -->
+    <section id="result" class="py-10 bg-gray-200">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6">Results</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                    <div class="col-span-4">Title</div>
+                    <div class="col-span-2">Result Date</div>
+                    <div class="col-span-2">Details</div>
+                    <div class="col-span-4">Actions</div>
+                </div>
+                <div id="resultContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Answer Key Section -->
+    <section id="answer-key" class="py-10">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6">Answer Keys</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                    <div class="col-span-4">Title</div>
+                    <div class="col-span-2">Release Date</div>
+                    <div class="col-span-2">Details</div>
+                    <div class="col-span-4">Actions</div>
+                </div>
+                <div id="answerKeyContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admission Section -->
+    <section id="admission" class="py-10 bg-gray-200">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6">Admissions</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                    <div class="col-span-4">Title</div>
+                    <div class="col-span-2">Last Date</div>
+                    <div class="col-span-2">Details</div>
+                    <div class="col-span-4">Actions</div>
+                </div>
+                <div id="admissionContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Updates Section -->
+    <section id="other-updates" class="py-10">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-6">Other Updates</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="grid grid-cols-12 font-semibold bg-gray-200 p-4">
+                    <div class="col-span-4">Title</div>
+                    <div class="col-span-4">Details</div>
+                    <div class="col-span-4">Actions</div>
+                </div>
+                <div id="otherUpdatesContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-300 text-black py-6">
+        <div class="container mx-auto text-center">
+            <p>© 2025 AlertsSarkari. All rights reserved.</p>
+            <p>Disclaimer: We are not affiliated with any government organization. All information is for general purposes only.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data (replace with API fetch)
+        const data = {
+            jobs: [
+                { title: "SSC CGL 2025", posts: 14582, lastDate: "2025-07-10", applyLink: "https://ssc.nic.in", details: "Combined Graduate Level Exam" },
+                { title: "UPSC Civil Services 2025", posts: 1056, lastDate: "2025-07-01", applyLink: "https://upsc.gov.in", details: "IAS, IPS, and other services" },
+                { title: "RRB NTPC 2025", posts: 10844, lastDate: "2025-07-20", applyLink: "https://rrb.gov.in", details: "Non-Technical Popular Categories" },
+                { title: "IBPS PO 2025", posts: 4000, lastDate: "2025-08-10", applyLink: "https://ibps.in", details: "Probationary Officer posts" },
+                { title: "FCI Recruitment 2025", posts: 33566, lastDate: "2025-09-15", applyLink: "https://fci.gov.in", details: "Category 2 and 3 posts" },
+                { title: "Indian Coast Guard Navik 2025", posts: 630, lastDate: "2025-06-23", applyLink: "https://indiancoastguard.gov.in", details: "Navik and Yantrik posts" },
+                { title: "SSC Stenographer 2025", posts: 261, lastDate: "2025-07-05", applyLink: "https://ssc.nic.in", details: "Grade C and D posts" },
+                { title: "HPCL Officer Recruitment 2025", posts: 372, lastDate: "2025-07-15", applyLink: "https://hpclcareers.in", details: "Officer and Junior Executive" },
+                { title: "DRDO INMAS Apprentice 2025", posts: 38, lastDate: "2025-06-30", applyLink: "https://drdo.gov.in", details: "Graduate and Diploma Apprentice" },
+                { title: "NICL AO 2025", posts: 266, lastDate: "2025-07-12", applyLink: "https://nationalinsurance.nic.co.in", details: "Administrative Officer posts" },
+                { title: "India Post GDS 2025", posts: 40739, lastDate: "2025-08-05", applyLink: "https://indiapost.gov.in", details: "Gramin Dak Sevak posts" },
+                { title: "SBI Clerk 2025", posts: 8500, lastDate: "2025-07-25", applyLink: "https://sbi.co.in", details: "Junior Associate posts" }
+            ],
+            incomingJobs: [
+                { title: "UPSC NDA 1 2026", syllabus: "Mathematics, General Ability Test", eligibility: "12th pass, age 16.5-19.5 years", officialLink: "https://upsc.gov.in", applyLink: "https://upsc.gov.in", status: "Further notice" },
+                { title: "SSC CHSL 2026", syllabus: "English, Quantitative Aptitude, General Intelligence, General Awareness", eligibility: "12th pass, age 18-27 years", officialLink: "https://ssc.nic.in", applyLink: "https://ssc.nic.in", status: "Further notice" },
+                { title: "Railway Group D 2026", syllabus: "Mathematics, General Intelligence, General Science, General Awareness", eligibility: "10th pass, age 18-33 years", officialLink: "https://rrb.gov.in", applyLink: "https://rrb.gov.in", status: "Further notice" },
+                { title: "IBPS Clerk 2026", syllabus: "English, Numerical Ability, Reasoning, Computer Knowledge", eligibility: "Graduate, age 20-28 years", officialLink: "https://ibps.in", applyLink: "https://ibps.in", status: "Further notice" },
+                { title: "SBI PO 2026", syllabus: "Quantitative Aptitude, Reasoning, English, General Awareness", eligibility: "Graduate, age 21-30 years", officialLink: "https://sbi.co.in", applyLink: "https://sbi.co.in", status: "Further notice" },
+                { title: "SSC MTS 2026", syllabus: "General Intelligence, Numerical Aptitude, General English, General Awareness", eligibility: "10th pass, age 18-25 years", officialLink: "https://ssc.nic.in", applyLink: "https://ssc.nic.in", status: "Further notice" },
+                { title: "UPSC CDS 1 2026", syllabus: "English, General Knowledge, Elementary Mathematics", eligibility: "Graduate, age 19-25 years", officialLink: "https://upsc.gov.in", applyLink: "https://upsc.gov.in", status: "Further notice" }
+            ],
+            admitCards: [
+                { title: "SSC GD Constable Admit Card 2025", examDate: "2025-06-29", downloadLink: "https://ssc.nic.in", details: "Re-exam admit card" },
+                { title: "UPSC CSE Prelims Admit Card 2025", examDate: "2025-06-25", downloadLink: "https://upsc.gov.in", details: "Civil Services prelims" },
+                { title: "RRB NTPC Admit Card 2025", examDate: "2025-07-10", downloadLink: "https://rrb.gov.in", details: "Level 1 exam" },
+                { title: "IBPS PO Prelims Admit Card 2025", examDate: "2025-08-15", downloadLink: "https://ibps.in", details: "Probationary Officer prelims" },
+                { title: "SBI Clerk Admit Card 2025", examDate: "2025-07-30", downloadLink: "https://sbi.co.in", details: "Junior Associate exam" },
+                { title: "India Post GDS Admit Card 2025", examDate: "2025-08-10", downloadLink: "https://indiapost.gov.in", details: "Gramin Dak Sevak selection" },
+                { title: "SSC Stenographer Admit Card 2025", examDate: "2025-07-08", downloadLink: "https://ssc.nic.in", details: "Grade C and D exam" }
+            ],
+            results: [
+                { title: "NTA NEET UG Result 2025", resultDate: "2025-06-14", resultLink: "https://nta.ac.in", details: "MBBS/BDS admission result" },
+                { title: "SSC CGL Tier 1 Result 2024", resultDate: "2025-01-10", resultLink: "https://ssc.nic.in", details: "Graduate level exam result" },
+                { title: "UPSC CSE Mains Result 2024", resultDate: "2025-02-15", resultLink: "https://upsc.gov.in", details: "Civil Services mains result" },
+                { title: "RRB Group D Result 2024", resultDate: "2024-12-20", resultLink: "https://rrb.gov.in", details: "Level 1 posts result" },
+                { title: "IBPS Clerk Result 2024", resultDate: "2025-01-05", resultLink: "https://ibps.in", details: "Clerical cadre result" },
+                { title: "SBI PO Result 2024", resultDate: "2025-02-10", resultLink: "https://sbi.co.in", details: "Probationary Officer result" },
+                { title: "NTA CUET UG Result 2025", resultDate: "2025-06-20", resultLink: "https://nta.ac.in", details: "Undergraduate admission result" }
+            ],
+            answerKeys: [
+                { title: "NTA CUET UG Answer Key 2025", releaseDate: "2025-06-03", downloadLink: "https://nta.ac.in", details: "Provisional answer key" },
+                { title: "SSC CGL Tier 1 Answer Key 2024", releaseDate: "2024-11-15", downloadLink: "https://ssc.nic.in", details: "Provisional answer key" },
+                { title: "RRB NTPC Answer Key 2025", releaseDate: "2025-06-25", downloadLink: "https://rrb.gov.in", details: "Level 1 answer key" },
+                { title: "IBPS PO Answer Key 2025", releaseDate: "2025-07-05", downloadLink: "https://ibps.in", details: "Preliminary exam key" },
+                { title: "SBI Clerk Answer Key 2025", releaseDate: "2025-07-15", downloadLink: "https://sbi.co.in", details: "Junior Associate exam key" },
+                { title: "SSC Stenographer Answer Key 2025", releaseDate: "2025-06-20", downloadLink: "https://ssc.nic.in", details: "Grade C and D key" }
+            ],
+            admissions: [
+                { title: "Navodaya Vidyalaya Class 6 Admission 2026", lastDate: "2025-07-15", applyLink: "https://navodaya.gov.in", details: "Online application open" },
+                { title: "NTA CUET UG Admission 2025", lastDate: "2025-06-30", applyLink: "https://nta.ac.in", details: "Undergraduate admissions" },
+                { title: "JEE Main 2026 Admission", lastDate: "2025-12-10", applyLink: "https://jeemain.nta.nic.in", details: "Engineering admissions" },
+                { title: "NEET UG 2026 Admission", lastDate: "2025-12-15", applyLink: "https://nta.ac.in", details: "Medical admissions" },
+                { title: "CLAT 2026 Admission", lastDate: "2025-10-20", applyLink: "https://consortiumofnlus.ac.in", details: "Law admissions" },
+                { title: "NCHM JEE 2025 Admission", lastDate: "2025-07-10", applyLink: "https://nchm.nta.nic.in", details: "Hotel management admissions" },
+                { title: "UPSC ESE 2026 Admission", lastDate: "2025-09-05", applyLink: "https://upsc.gov.in", details: "Engineering services admission" }
+            ],
+            otherUpdates: [
+                { title: "Aadhar Card Update", details: "Update your Aadhar details online", link: "https://uidai.gov.in" },
+                { title: "Voter ID Application", details: "Apply for new Voter ID", link: "https://nvsp.in" },
+                { title: "E-Shram Card Registration", details: "Register for E-Shram benefits", link: "https://eshram.gov.in" },
+                { title: "Ration Card Update", details: "Apply or update ration card details", link: "https://nfsa.gov.in" },
+                { title: "UPBCOW Scheme", details: "Check eligibility for UPBCOW benefits", link: "https://up.gov.in" },
+                { title: "PM Awas Yojana", details: "Apply for housing scheme", link: "https://pmaymis.gov.in" },
+                { title: "Ayushman Bharat Card", details: "Register for health insurance", link: "https://pmjay.gov.in" },
+                { title: "Pradhan Mantri Ujjwala Yojana", details: "Apply for free LPG connection", link: "https://pmuy.gov.in" },
+                { title: "MGNREGA Job Card", details: "Register for rural employment", link: "https://nrega.nic.in" },
+                { title: "Swachh Bharat Mission", details: "Check toilet construction benefits", link: "https://swachhbharatmission.gov.in" },
+                { title: "PM Kisan Samman Nidhi", details: "Register for farmer income support", link: "https://pmkisan.gov.in" }
+            ]
+        };
+
+        // Render data to DOM
+        function renderData() {
+            const sections = [
+                { id: "jobsContainer", data: data.jobs, template: jobTemplate },
+                { id: "incomingJobsContainer", data: data.incomingJobs, template: incomingJobTemplate },
+                { id: "admitCardContainer", data: data.admitCards, template: admitCardTemplate },
+                { id: "resultContainer", data: data.results, template: resultTemplate },
+                { id: "answerKeyContainer", data: data.answerKeys, template: answerKeyTemplate },
+                { id: "admissionContainer", data: data.admissions, template: admissionTemplate },
+                { id: "otherUpdatesContainer", data: data.otherUpdates, template: otherUpdateTemplate }
+            ];
+
+            sections.forEach(section => {
+                const container = document.getElementById(section.id);
+                container.innerHTML = section.data.map(section.template).join("");
+            });
+        }
+
+        // Templates for each row
+        function jobTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-2">${item.posts}</div>
+                    <div class="col-span-2 last-date">${item.lastDate}</div>
+                    <div class="col-span-4">
+                        <a href="${item.applyLink}" target="_blank" class="text-blue-600 hover:underline">Apply Online</a>
+                        <span class="ml-2">${item.details}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function incomingJobTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-2">${item.status}</div>
+                    <div class="col-span-2">${item.syllabus}</div>
+                    <div class="col-span-4">
+                        <a href="${item.officialLink}" target="_blank" class="text-blue-600 hover:underline">Official Site</a>
+                        <a href="${item.applyLink}" target="_blank" class="view-button text-white px-3 py-1 rounded ml-2">View</a>
+                        <div>Eligibility: ${item.eligibility}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function admitCardTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-2">${item.examDate}</div>
+                    <div class="col-span-2">${item.details}</div>
+                    <div class="col-span-4">
+                        <a href="${item.downloadLink}" target="_blank" class="text-blue-600 hover:underline">Download Admit Card</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function resultTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-2">${item.resultDate}</div>
+                    <div class="col-span-2">${item.details}</div>
+                    <div class="col-span-4">
+                        <a href="${item.resultLink}" target="_blank" class="text-blue-600 hover:underline">Check Result</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function answerKeyTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-2">${item.releaseDate}</div>
+                    <div class="col-span-2">${item.details}</div>
+                    <div class="col-span-4">
+                        <a href="${item.downloadLink}" target="_blank" class="text-blue-600 hover:underline">Download Answer Key</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function admissionTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-2 last-date">${item.lastDate}</div>
+                    <div class="col-span-2">${item.details}</div>
+                    <div class="col-span-4">
+                        <a href="${item.applyLink}" target="_blank" class="text-blue-600 hover:underline">Apply Online</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function otherUpdateTemplate(item) {
+            return `
+                <div class="list-row grid grid-cols-12 p-4 border-b">
+                    <div class="col-span-4">${item.title}</div>
+                    <div class="col-span-4">${item.details}</div>
+                    <div class="col-span-4">
+                        <a href="${item.link}" target="_blank" class="text-blue-600 hover:underline">More Info</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Search functionality
+        document.getElementById("searchInput").addEventListener("input", function(e) {
+            const query = e.target.value.toLowerCase();
+            const allItems = [...data.jobs, ...data.incomingJobs, ...data.admitCards, ...data.results, ...data.answerKeys, ...data.admissions, ...data.otherUpdates];
+            const filtered = allItems.filter(item => item.title.toLowerCase().includes(query));
+            document.getElementById("jobsContainer").innerHTML = filtered.filter(i => data.jobs.includes(i)).map(jobTemplate).join("");
+            document.getElementById("incomingJobsContainer").innerHTML = filtered.filter(i => data.incomingJobs.includes(i)).map(incomingJobTemplate).join("");
+            document.getElementById("admitCardContainer").innerHTML = filtered.filter(i => data.admitCards.includes(i)).map(admitCardTemplate).join("");
+            document.getElementById("resultContainer").innerHTML = filtered.filter(i => data.results.includes(i)).map(resultTemplate).join("");
+            document.getElementById("answerKeyContainer").innerHTML = filtered.filter(i => data.answerKeys.includes(i)).map(answerKeyTemplate).join("");
+            document.getElementById("admissionContainer").innerHTML = filtered.filter(i => data.admissions.includes(i)).map(admissionTemplate).join("");
+            document.getElementById("otherUpdatesContainer").innerHTML = filtered.filter(i => data.otherUpdates.includes(i)).map(otherUpdateTemplate).join("");
+        });
+
+        // Navbar scroll effect
+        window.addEventListener("scroll", function() {
+            const navbar = document.getElementById("navbar");
+            if (window.scrollY > 50) {
+                navbar.classList.add("navbar-scrolled");
+            } else {
+                navbar.classList.remove("navbar-scrolled");
+            }
+        });
+
+        // Initial render
+        renderData();
+
+        // Simulate periodic data update (replace with real API call)
+        setInterval(() => {
+            console.log("Fetching new data...");
+            renderData(); // Re-render with updated data
+        }, 60000); // Every 60 seconds
+    </script>
+</body>
+</html>
